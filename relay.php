@@ -29,7 +29,11 @@ $ALLOWED = [
 ];
 
 // Headers that describe this hop, not the request or the response.
-$HOP = ['host', 'connection', 'keep-alive', 'content-length', 'transfer-encoding', 'accept-encoding',
+// Accept-Encoding is deliberately not here: the app sends "identity" on
+// purpose (other values drew HTTP 406 from Mozilla's edge in its tests), and
+// the Cloudflare worker forwards it too. curl is not asked to decode, so the
+// body and its Content-Encoding pass through unchanged.
+$HOP = ['host', 'connection', 'keep-alive', 'content-length', 'transfer-encoding',
     'x-forwarded-for', 'x-forwarded-proto', 'x-forwarded-host', 'x-real-ip', 'upgrade', 'te', 'trailer'];
 
 function fail($status, $why)
